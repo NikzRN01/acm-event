@@ -71,7 +71,7 @@ export function ECGChart({ data, showAnomalies }: ECGChartProps) {
                 <Scatter
                   data={anomalyPoints}
                   dataKey="signal"
-                  fill="#f97316"
+                  fill="#ef4444"
                   shape={(props: { cx?: number; cy?: number }) => {
                     const { cx, cy } = props;
                     return (
@@ -79,7 +79,7 @@ export function ECGChart({ data, showAnomalies }: ECGChartProps) {
                         cx={cx}
                         cy={cy}
                         r={5}
-                        fill="#f97316"
+                        fill="#ef4444"
                         stroke="#111827"
                         strokeWidth={2}
                       />
