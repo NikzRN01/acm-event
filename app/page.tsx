@@ -63,57 +63,61 @@ export default function HomePage() {
 
   return (
     <DashboardLayout>
-      <Card className="border-sky-200/60 bg-gradient-to-r from-sky-500/10 via-cyan-500/5 to-teal-500/10 dark:border-sky-900/50">
-        <CardHeader className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-          <div className="space-y-1">
-            <CardTitle className="font-display text-2xl md:text-3xl">ECG Anomaly Detection Dashboard</CardTitle>
-            <CardDescription className="text-sm md:text-base">
-              Upload an ECG CSV and visualize anomalies on the waveform.
-            </CardDescription>
-          </div>
-          <ThemeToggle />
-        </CardHeader>
-      </Card>
-
-      <section className="animate-fade-in-up">
-        <FlickeringGridDemo />
-      </section>
-
-      <section className="grid grid-cols-1 gap-6 lg:grid-cols-3">
-        <div className="lg:col-span-1">
-          <FileUploadDropzone onDataParsed={handleDataParsed} />
+      <div className="relative isolate overflow-hidden rounded-2xl">
+        <div className="pointer-events-none absolute inset-0 -z-10 opacity-25">
+          <FlickeringGridDemo backgroundOnly />
         </div>
 
-        <Card className="lg:col-span-2">
-          <CardHeader>
-            <CardTitle>Detection Controls</CardTitle>
-            <CardDescription>
-              Run simulated anomaly detection using a mean/std threshold heuristic.
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="flex flex-col gap-4">
-            <div className="flex flex-wrap items-center gap-3">
-              <Button
-                onClick={handleDetectAnomalies}
-                disabled={rawData.length === 0 || detectionState === "processing"}
-              >
-                {detectionState === "processing" ? "Processing..." : "Detect Anomalies"}
-              </Button>
-              <Button variant="outline" onClick={handleReset} disabled={rawData.length === 0}>
-                Reset
-              </Button>
-            </div>
-            <p className="text-sm text-muted-foreground">
-              File: <span className="font-medium text-foreground">{fileName || "None"}</span>
-            </p>
-            <AnomalyStatus state={detectionState} anomalyCount={anomalyIndices.length} />
-          </CardContent>
-        </Card>
-      </section>
+        <div className="relative z-10 grid grid-cols-1 gap-6">
+          <Card className="border-sky-200/60 bg-gradient-to-r from-sky-500/10 via-cyan-500/5 to-teal-500/10 dark:border-sky-900/50">
+            <CardHeader className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+              <div className="space-y-1">
+                <CardTitle className="font-display text-2xl md:text-3xl">ECG Anomaly Detection Dashboard</CardTitle>
+                <CardDescription className="text-sm md:text-base">
+                  Upload an ECG CSV and visualize anomalies on the waveform.
+                </CardDescription>
+              </div>
+              <ThemeToggle />
+            </CardHeader>
+          </Card>
 
-      <section className="animate-fade-in-up">
-        <ECGChart data={chartData} showAnomalies={detectionEnabled} />
-      </section>
+          <section className="grid grid-cols-1 gap-6 lg:grid-cols-3">
+            <div className="lg:col-span-1">
+              <FileUploadDropzone onDataParsed={handleDataParsed} />
+            </div>
+
+            <Card className="lg:col-span-2">
+              <CardHeader>
+                <CardTitle>Detection Controls</CardTitle>
+                <CardDescription>
+                  Run simulated anomaly detection using a mean/std threshold heuristic.
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="flex flex-col gap-4">
+                <div className="flex flex-wrap items-center gap-3">
+                  <Button
+                    onClick={handleDetectAnomalies}
+                    disabled={rawData.length === 0 || detectionState === "processing"}
+                  >
+                    {detectionState === "processing" ? "Processing..." : "Detect Anomalies"}
+                  </Button>
+                  <Button variant="outline" onClick={handleReset} disabled={rawData.length === 0}>
+                    Reset
+                  </Button>
+                </div>
+                <p className="text-sm text-muted-foreground">
+                  File: <span className="font-medium text-foreground">{fileName || "None"}</span>
+                </p>
+                <AnomalyStatus state={detectionState} anomalyCount={anomalyIndices.length} />
+              </CardContent>
+            </Card>
+          </section>
+
+          <section className="animate-fade-in-up">
+            <ECGChart data={chartData} showAnomalies={detectionEnabled} />
+          </section>
+        </div>
+      </div>
     </DashboardLayout>
   );
 }

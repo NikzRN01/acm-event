@@ -24,9 +24,19 @@ const GRID_CONFIG = {
   },
 } as const;
 
-const FlickeringGridDemo = () => {
+interface FlickeringGridDemoProps {
+  backgroundOnly?: boolean;
+}
+
+const FlickeringGridDemo = ({ backgroundOnly = false }: FlickeringGridDemoProps) => {
   return (
-    <div className="relative h-[340px] w-full overflow-hidden rounded-2xl border border-sky-200/50 dark:border-sky-900/50">
+    <div
+      className={
+        backgroundOnly
+          ? "relative h-full w-full overflow-hidden"
+          : "relative h-[340px] w-full overflow-hidden rounded-2xl border border-sky-200/50 dark:border-sky-900/50"
+      }
+    >
       <div
         className="absolute inset-0 bg-cover bg-center"
         style={{ backgroundImage: `url(${HERO_IMAGE})` }}
@@ -42,12 +52,14 @@ const FlickeringGridDemo = () => {
         <FlickeringGrid {...GRID_CONFIG.accent} />
       </div>
 
-      <div className="relative z-30 flex h-full w-full items-center justify-center">
-        <div className="flex items-center gap-2 rounded-full border border-white/30 bg-white/10 px-4 py-2 text-white backdrop-blur">
-          <Activity className="h-5 w-5" />
-          <span className="text-sm font-medium">ECG Monitoring Background</span>
+      {!backgroundOnly ? (
+        <div className="relative z-30 flex h-full w-full items-center justify-center">
+          <div className="flex items-center gap-2 rounded-full border border-white/30 bg-white/10 px-4 py-2 text-white backdrop-blur">
+            <Activity className="h-5 w-5" />
+            <span className="text-sm font-medium">ECG Monitoring Background</span>
+          </div>
         </div>
-      </div>
+      ) : null}
     </div>
   );
 };

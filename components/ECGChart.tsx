@@ -68,12 +68,65 @@ export function ECGChart({ data, showAnomalies }: ECGChartProps) {
                 animationDuration={450}
               />
               {showAnomalies ? (
-                <Scatter data={anomalyPoints} dataKey="signal" fill="#ef4444" shape="circle" />
+                <Scatter
+                  data={anomalyPoints}
+                  dataKey="signal"
+                  fill="#f97316"
+                  shape={(props: { cx?: number; cy?: number }) => {
+                    const { cx, cy } = props;
+                    return (
+                      <circle
+                        cx={cx}
+                        cy={cy}
+                        r={5}
+                        fill="#f97316"
+                        stroke="#111827"
+                        strokeWidth={2}
+                      />
+                    );
+                  }}
+                />
               ) : null}
               <Brush dataKey="time" height={20} stroke="#0d9488" travellerWidth={8} />
             </LineChart>
           </ResponsiveContainer>
         </div>
+
+        {showAnomalies ? (
+          <div className="mt-4 rounded-lg border border-border bg-muted/30 p-3">
+            <div className="mb-2 flex items-center justify-between">
+              <p className="text-sm font-semibold">Anomaly Points</p>
+              <span className="rounded-full bg-danger/15 px-2 py-0.5 text-xs font-medium text-danger">
+                {anomalyPoints.length} total
+              </span>
+            </div>
+
+            {anomalyPoints.length === 0 ? (
+              <p className="text-sm text-muted-foreground">No anomaly points detected for the current threshold.</p>
+            ) : (
+              <div className="max-h-44 overflow-auto rounded-md border border-border/70 bg-card">
+                <table className="w-full text-left text-sm">
+                  <thead className="sticky top-0 bg-card">
+                    <tr className="border-b border-border/70">
+                      <th className="px-3 py-2 font-medium">Index</th>
+                      <th className="px-3 py-2 font-medium">Time</th>
+                      <th className="px-3 py-2 font-medium">Signal</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {anomalyPoints.map((point) => (
+                      <tr key={`${point.index}-${point.time}`} className="border-b border-border/40 last:border-b-0">
+                        <td className="px-3 py-1.5">{point.index}</td>
+                        <td className="px-3 py-1.5">{point.time.toFixed(2)}</td>
+                        <td className="px-3 py-1.5 font-medium text-danger">{point.signal.toFixed(4)}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+          </div>
+        ) : null}
       </CardContent>
     </Card>
   );
